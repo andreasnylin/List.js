@@ -1,5 +1,5 @@
 /*
- * spookyVision.js - v0.3 - 2013-10-25
+ * List.js - v0.1 - 2013-11-01
  * Created by Andreas Nylin
  * andreas.nylin@gmail.com / @andreasnylin / andreasnylin.com
  */
