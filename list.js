@@ -1,5 +1,5 @@
 /*
- * List.js - v0.1 - 2013-11-01
+ * List.js - v0.2 - 2013-11-07
  * Created by Andreas Nylin
  * andreas.nylin@gmail.com / @andreasnylin / andreasnylin.com
  */
@@ -34,6 +34,8 @@ List.prototype.clone = function() {
 
 List.prototype.compareObj = function(obj1, obj2) {
 	// TODO
+	throw 'compareObj() is not implemented yet';
+	
 	return null;
 };
 
@@ -43,6 +45,13 @@ List.prototype.contains = function(obj) {
 
 List.prototype.count = function() {
     return this.list.length;
+};
+
+List.prototype.equals = function(list) {
+	// TODO
+	throw 'equals() is not implemented yet';
+	
+	return false;
 };
 
 List.prototype.find = function(func) {
@@ -84,7 +93,7 @@ List.prototype.findLast = function(func) {
 		item,
 		part = [];
  
-	for(i = this.list.length - 1; i <= 0; i--) {
+	for(i = this.list.length - 1; i >= 0; i--) {
 		item = this.list[i];
 
 		if(func.call(this.list, item)) {
@@ -117,19 +126,23 @@ List.prototype.forEach = function(func, thisElement) {
 };
 
 List.prototype.get = function(i) {
-	var item = null;
+	var value = null;
 	
 	if(i < this.list.length) {
-		item = this.list[i];
+		value = this.list[i];
 	}
 	
-	return item;
+	return value;
+};
+
+List.prototype.getAll = function() {	
+	return this.list;
 };
 
 List.prototype.indexOf = function(obj) {
 	var pointer = -1;
 	
-	// TOOD: Needs to handle objects
+	// TODO: Needs to handle objects
 	if(!Array.prototype.indexOf) {
 		var i, l;
  
