@@ -1,0 +1,279 @@
+<script src="list.js"></script>
+<script>
+// Create a new empty list
+(function() {
+	var list = new List();
+	
+	console.log('Test: Create list', list);
+})();
+
+// Create a new list based on an array
+(function() {
+	var arr = [ 1, 2, 3 ];
+	var list = new List(arr);
+	
+	console.log('Test: Create list based on an array', list);
+})();
+
+// Add a value to a list
+(function() {
+	var list = new List();
+	list.add('a');
+	
+	console.log('Test: Add a value to a list', list);
+	
+	list.add('b').add('c');
+	
+	console.log(list);
+})();
+
+// Add multiple values to a list
+(function() {
+	var list = new List();
+	list.addMany([ 'd', 'e', 'f' ]);
+	
+	console.log('Test: Add multiple values to a list', list);
+})();
+
+// Clear all values in a list
+(function() {
+	var list = new List([ 'alpha', 'beta', 'charlie' ]);
+	
+	console.log('Test: Clear all values in a list', list);
+	
+	list.clear();
+	
+	console.log(list);
+})();
+
+// Clone a list
+(function() {
+	var list = new List([ 'red', 'orange', 'yellow' ]);
+	var list2 = list.clone();
+	
+	console.log('Test: Clone a list', list, list2);
+
+	list2.addMany(['green', 'blue', 'indigo', 'violet']);
+
+	console.log(list, list2);
+})();
+
+// Check if the list contains a certain value
+(function() {
+	var list = new List([ 'red', 'green', 'blue' ]);
+	
+	console.log('Test: Check if the list contains a certain value');
+	console.log('green:', list.contains('green'));
+	console.log('black:', list.contains('black'));
+})();
+
+// Check how many values there are in the list
+(function() {
+	var list = new List([ 'warrior', 'wizard', 'rogue', 'cleric' ]);
+	
+	console.log('Test: Check how many values there are in the list');
+	console.log('number of values:', list.count());
+})();
+
+// Find a matching value in a list
+(function() {
+	var numbers = [1,2,3,4,5,6,7,8,9];
+	var list = new List(numbers);
+	console.log('Test: Find a matching value in a list');
+	console.log(list.find(function(num) { return num < 5; }));
+})();
+
+// Find the last matching value in a list
+(function() {
+	var numbers = [1,2,3,4,5,6,7,8,9];
+	var list = new List(numbers);
+	console.log('Test: Find the last matching value in a list');
+	console.log(list.findLast(function(num) { return num < 5; }));
+})();
+
+// Find all matching values in a list
+(function() {
+	var numbers = [1,2,3,4,5,6,7,8,9];
+	var list = new List(numbers);
+	console.log('Test: Find all matching values in a list');
+	console.log(list.findAll(function(num) { return num < 5; })); 
+})();
+
+// Find all matching values in a list of objects
+(function() {
+	var positions = [{ x: 10, y: 20 }, { x: 22, y: 12 }, { x: 10, y: 33 }];
+	var list = new List(positions);
+	
+	console.log('Test: Find all matching values in a list of objectst');
+	console.log(list.findAll(function(pos) { return pos.x === 10; }));
+})();
+
+// Get the first value in the list
+(function() {
+	var list = new List( [ 'Luke', 'Leia', 'Han', 'Chewbacca' ] );
+	
+	console.log('Test: Get the first value in the list');
+	console.log(list.first());
+})();
+
+// Get the last value in the list
+(function() {
+	var list = new List( [ 'Link', 'Zelda', 'Gannon' ] );
+	
+	console.log('Test: Get the last value in the list');
+	console.log(list.last());
+})();
+
+// Loop each value in the list
+(function() {
+	console.log('Test: Loop each value in the list');
+	var list = new List( [ 'Gamma', 'Helm', 'Johnson', 'Vlissides' ] );
+	list.forEach(function(value, index, list) {
+		console.log('The value at index ' + index + ' is ' + value, ' this:', this);
+	});
+})();
+
+// Get value at a certain index
+(function() {
+	var list = new List( [ 'Angular', 'Knockout', 'Ember', 'Backbone' ] );
+	
+	console.log('Test: Get value at a certain index');
+	console.log(list.get(2));
+})();
+
+// Get the array of values
+(function() {
+	var list = new List( [ 'Pizza', 'Kebab', 'Hamburger', 'Taco' ] );
+	
+	console.log('Test: Get the array of values');
+	console.log(list.getAll());
+})();
+
+// Get index of a value
+(function() {
+	var list = new List( [ 'fire', 'ice', 'earth', 'wind' ] );
+	
+	console.log('Test: Get index of a value');
+	console.log('Index of ice is: ', list.indexOf('ice'));
+})();
+
+// Get the last index of a value
+(function() {
+	var list = new List( [ 0, 1, 1, 0, 1, 0, 0, 1, 0 ] );
+	
+	console.log('Test: Get last index of a value');
+	console.log('Last index of 1 is: ', list.lastIndexOf(1));
+})();
+
+// Insert value to a list
+(function() {
+	var list = new List( [ 'Ale', 'Lager', 'Pilsner' ] );
+	
+	console.log('Test: Insert value to a list');
+	console.log(list);
+	
+	list.insert('Stout', 1); // => result: Ale, Stout, Lager, Pilsner
+	console.log(list);
+	
+	list.insert('Porter'); // => result: Porter, Ale, Stout, Lager, Pilsner
+	console.log(list);
+})();
+
+// Insert multiple values to a list
+(function() {
+	var list = new List( [ 'Futura', 'Helvetica', 'Franklin' ] );
+	
+	console.log('Test: Insert multiple svalue to a list');
+	console.log(list);
+	
+	list.insertMany([ 'Gotham', 'Univers', 'DIN' ], 1); // => result: Futura, Gotham, Univers, DIN, Helvetica, Franklin
+	
+	console.log(list);
+})();
+
+// Get a certain range of values from a list
+(function() {
+	var list = new List( [ 1, 2, 3, 4, 5, 6 ] );
+	
+	console.log('Test: Get a certain range of values from a list');
+	console.log(list.range(2,2)); // => result: 3, 4
+})();
+
+// Remove a value from a list
+(function() {
+	var list = new List( [ 'Vampire', 'Verewolf', 'Zombie', 'Mutant' ] );
+	
+	console.log('Test: Remove a value from a list');
+	console.log(list);
+	
+	list.remove('Zombie'); // => result: 'Vampire', 'Verewolf', 'Mutant'
+	
+	console.log(list);
+})();
+
+// Remove multiple values from a list
+(function() {
+	var list = new List( [ 'ThunderCats', 'Transformers', 'Robotech', 'G-Force', 'M.A.S.K.' ] );
+	
+	console.log('Test: Remove multiple values from a list');
+	console.log(list);
+	
+	list.removeMany([ 'Transformers', 'M.A.S.K.' ]); // => result: 'ThunderCats', 'Robotech', 'G-Force'
+	
+	console.log(list);
+})();
+
+// Remove a range of values from a list
+(function() {
+	var list = new List( [ 'spider', 'bat', 'snake', 'wasp' ] );
+	
+	console.log('Test: Remove a range of values from a list');
+	console.log(list.list);
+	
+	list.removeRange(1,2); // => result: 'spider', 'wasp'
+	
+	console.log(list.list);
+})();
+
+// Set the value of a certain index in the list
+(function() {
+	var list = new List( ['kyle', 'kenny', 'stan'] );
+	
+	console.log('TEST: Set the value of a certain index in the list');
+	console.log(list.list);
+	
+	list.set(1, 'cartman'); // => result: 'kyle', 'cartman', 'stan'
+	
+	console.log(list.list);
+})();
+
+// Skip values in a list
+(function() {
+	var list = new List( [ 1, 2, 3, 4, 5 ] );
+	
+	console.log('TEST: Skip values in a list');
+	
+	console.log(list.skip(3)); // => result: 4, 5
+})();
+
+// Take values in a list
+(function() {
+	var list = new List( [ 1, 2, 3, 4, 5 ] );
+	
+	console.log('TEST: Take values in a list');
+	
+	console.log(list.take(3)); // => result: 1, 2, 3
+})();
+
+// Get all unique values in a list
+(function() {
+	var list = new List([1, 2, 3, 2, 1]);
+	
+	console.log('TEST: Get all unique values in a list');
+	
+	console.log(list.unique()); // => returns: 1, 2, 3
+})();
+
+// Chaining... TODO
+
+</script>
