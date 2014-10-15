@@ -28,11 +28,12 @@ list.clear();
 // Clone a list
 var list = new List([ 'red', 'orange', 'yellow' ]);
 var list2 = list.clone();
-
 list2.addMany(['green', 'blue', 'indigo', 'violet']);
-
-console.log(list);
-console.log(list2);
+/*
+=> result:
+list = [ 'red', 'orange', 'yellow' ]
+list2 = [ 'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet' ]
+*/
 
 // Check if the list contains a certain value
 var list = new List([ 'red', 'green', 'blue' ]);
@@ -88,6 +89,12 @@ The value at index 3 is Vlissides
 var list = new List( [ 'Angular', 'Knockout', 'Ember', 'Backbone' ] );
 list.get(2); // => returns: Ember
 
+// Get every X value from a list
+var list = new List( [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ] );
+list.getNth(0, 2); // => result: 1, 3, 5, 7, 9
+list.getNth(1, 2); // => result: 2, 4, 6, 8
+list.getNth(2, 3); // => result: 3, 6, 9
+
 // Get index of a value
 var list = new List( [ 'fire', 'ice', 'earth', 'wind' ] );
 list.indexOf('ice'); // => returns: 1
@@ -129,6 +136,26 @@ list.set(1, 'cartman'); // => result: 'kyle', 'cartman', 'stan'
 // Skip values in a list
 var list = new List( [ 1, 2, 3, 4, 5 ] );
 list.skip(3); // => result: 4, 5
+
+// Split values in a list
+var list = new List( [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] );
+var list2 = new List( [ 'a', 'b', 'c', 'd' ] );
+list.split(3); // => result: [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ], [10] ]
+list2.split(2); // => result: [ [ 'a', 'b' ], [ 'c', 'd' ] ]
+
+// Split values in a list into columns
+var list = new List( [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] );
+var list2 = new List( [ 'a', 'b', 'c', 'd' ] );
+
+list.splitColumns(4); 
+/* => result: 	
+[ 1, 2, 3 ], 
+[ 4, 5, 6 ], 
+[ 7, 8 ],
+[ 9, 10]  
+*/
+
+list2.splitColumns(2); // => result: [ 'a', 'b' ], [ 'c', 'd' ]
 
 // Take values in a list
 var list = new List( [ 1, 2, 3, 4, 5 ] );

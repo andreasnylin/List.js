@@ -139,6 +139,18 @@ List.prototype.getAll = function() {
 	return this.list;
 };
 
+List.prototype.getNth = function(startIndex, cycleSize) {
+	var i,
+		l,
+		list = new List();
+	
+	for (i = startIndex, l = this.list.length; i < l; i += cycleSize) {
+		list.add(this.list[i]);
+	}
+
+	return list;
+};
+
 List.prototype.indexOf = function(obj) {
 	var pointer = -1;
 	
@@ -189,7 +201,7 @@ List.prototype.last = function() {
 List.prototype.lastIndexOf = function(obj) {
 	var pointer = -1;
 	
-	// TOOD: Needs to handle objects
+	// TODO: Needs to handle objects
 	if(!Array.prototype.lastIndexOf) {
 		var i;
 
@@ -264,6 +276,43 @@ List.prototype.skip = function(count) {
     }
 
     return new List(part);
+};
+
+List.prototype.split = function(count) {
+    var i = 0,
+    	l = this.list.length,
+    	parts = new List();
+
+    while(i < l) {
+    	parts.add(this.skip(i).take(count));
+    	i += count;
+    }
+
+    return parts;
+};
+
+List.prototype.splitColumns = function(parts) {
+    var list = new List(),
+		defaultSize = Math.floor(this.list.length / parts),
+		offset = this.list.length % parts,
+		position = 0,
+		i,
+		size;
+
+    for (i = 0; i < parts; i++) {
+		size = defaultSize;
+
+		if (i < offset) {
+		    size++; // Just add one to the size (it's enough).
+		}
+
+		list.add(this.range(position, size));
+
+		// Set the new position after creating a part list, so that it always start with position zero on the first yield return above.
+		position += size;
+    }
+
+    return list;
 };
 
 List.prototype.take = function(count) {
