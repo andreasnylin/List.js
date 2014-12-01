@@ -1,5 +1,5 @@
 /*
- * List.js - v0.2 - 2013-11-07
+ * List.js - v0.3 - 2014-12-01
  * Created by Andreas Nylin
  * andreas.nylin@gmail.com / @andreasnylin / andreasnylin.com
  */
