@@ -1,287 +1,403 @@
 <script src="list.js"></script>
 <script>
+
+/*
+* Test helper
+*/
+function test(n, f) {
+	console.group('Test: ' + n);
+	f();
+	console.groupEnd();
+}
+
+test.succeded = 0;
+test.failed = 0;
+
+test.that = function(n, t) {
+	if(t) {
+		console.log('%c ' + n + ' (succeded)', 'color:green');
+		test.succeded++;
+	}
+	else {
+		console.error('%s (failed)', n);
+		test.failed++;
+	}
+};
+
+test.summary = function() {
+	console.log(test.succeded + ' tests succeded');
+	console.log(test.failed + ' tests failed');
+}
+
+/*
+* Perform tests
+*/
+
 // Create a new empty list
-(function() {
+test('Create list', function() {
 	var list = new List();
-	
-	console.log('Test: Create list', list);
-})();
+
+	test.that('List was created', list !== undefined);
+	test.that('List length is 0', list.count() === 0);
+});
 
 // Create a new list based on an array
-(function() {
-	var arr = [ 1, 2, 3 ];
-	var list = new List(arr);
-	
-	console.log('Test: Create list based on an array', list);
-})();
+test('Create a new list based on an array', function() {
+	var arr = [ 1, 2, 3 ],
+		list = new List(arr);
+
+	test.that('List was created', list !== undefined);
+	test.that('List length is 3', list.count() === 3);
+	test.that('Value of first item is 1', list.get(0) === 1);
+	test.that('Value of third item is 3', list.get(2) === 3);
+});
 
 // Add a value to a list
-(function() {
+test('Add a value to a list', function() {
 	var list = new List();
+
+	test.that('List was created', list !== undefined);
+	test.that('List length is 0', list.count() === 0);
+
 	list.add('a');
-	
-	console.log('Test: Add a value to a list', list);
-	
+
+	test.that('Value "a" was added', list.indexOf('a') === 0);
+	test.that('List length is 1', list.count() === 1);
+
 	list.add('b').add('c');
-	
-	console.log(list);
-})();
+
+	test.that('Value "b" and "c" was added', list.get(1) === 'b' && list.get(2) === 'c');
+	test.that('List length is 3', list.count() === 3);
+});
 
 // Add multiple values to a list
-(function() {
+test('Add multiple values to a list', function() {
 	var list = new List();
-	list.addMany([ 'd', 'e', 'f' ]);
+
+	test.that('List was created', list !== undefined);
+	test.that('List length is 0', list.count() === 0);
 	
-	console.log('Test: Add multiple values to a list', list);
-})();
+	list.addMany([ 'd', 'e', 'f' ]);
+
+	test.that('List length is 3', list.count() === 3);
+	test.that('Value of first item is "d"', list.get(0) === 'd');
+	test.that('Value of third item is "f"', list.get(2) === 'f');
+});
 
 // Clear all values in a list
-(function() {
+test('Clear all values in a list', function() {
 	var list = new List([ 'alpha', 'beta', 'charlie' ]);
-	
-	console.log('Test: Clear all values in a list', list);
+
+	test.that('List was created', list !== undefined);
+	test.that('List length is 3', list.count() === 3);
 	
 	list.clear();
 	
-	console.log(list);
-})();
+	test.that('List length is 0', list.count() === 0);
+});
 
 // Clone a list
-(function() {
+test('Clone a list', function() {
 	var list = new List([ 'red', 'orange', 'yellow' ]);
+
+	test.that('List was created', list !== undefined);
+	test.that('List length is 3', list.count() === 3);
+
 	var list2 = list.clone();
-	
-	console.log('Test: Clone a list', list, list2);
+
+	test.that('List2 was cloned and created', list2 !== undefined);
+	test.that('List2 length equals list length', list2.count() === list.count());
 
 	list2.addMany(['green', 'blue', 'indigo', 'violet']);
 
-	console.log(list, list2);
-})();
+	test.that('List length is 3', list.count() === 3);
+	test.that('List2 length is 7', list2.count() === 7);
+});
 
 // Check if the list contains a certain value
-(function() {
+test('Check if the list contains a certain value', function() {
 	var list = new List([ 'red', 'green', 'blue' ]);
-	
-	console.log('Test: Check if the list contains a certain value');
-	console.log('green:', list.contains('green'));
-	console.log('black:', list.contains('black'));
-})();
+
+	test.that('List was created', list !== undefined);
+	test.that('List contains value "green"', list.contains('green'));
+	test.that('List does not contain value "black"', !list.contains('black'));
+});
 
 // Check how many values there are in the list
-(function() {
+test('Check how many values there are in the list', function() {
 	var list = new List([ 'warrior', 'wizard', 'rogue', 'cleric' ]);
 	
-	console.log('Test: Check how many values there are in the list');
-	console.log('number of values:', list.count());
-})();
+	test.that('List was created', list !== undefined);
+	test.that('List length is 4', list.count() === 4);
+
+	list.add('paladin');
+
+	test.that('List length is 5', list.count() === 5);
+});
+
+// Compare lists
+test('Compare lists', function() {
+	var list1 = new List([ 1, 2, 3 ]);
+	var list2 = list1.clone();
+	var list3 = new List([ 1, 2 ]);
+	var list4 = new List([ 4, 5, 6 ]);
+	var list5 = new List([ 'a', 'b', 'c' ]);
+	var list6 = new List([ 'a', 'b', 'c' ]);
+	// var list7 = new List([ { a: 1, b: 2 } ]);
+	// var list8 = new List([ { a: 1, b: 2 } ]);
+	
+	test.that('list1 equals list2', list1.equals(list2));
+	test.that('list1 equals list2:', list1.equals(list2));
+	test.that('list1 does not equal list3:', !list1.equals(list3));
+	test.that('list1 doest not equal list4:', !list1.equals(list4));
+	test.that('list5 equals list6:', list5.equals(list6));
+	list6.remove('b');
+	test.that('list5 does not equal list6 (after remove "b"):', !list5.equals(list6));
+	// test.that('list7 equals list8:', list7.equals(list8));
+});
 
 // Find a matching value in a list
-(function() {
-	var numbers = [1,2,3,4,5,6,7,8,9];
-	var list = new List(numbers);
-	console.log('Test: Find a matching value in a list');
-	console.log(list.find(function(num) { return num < 5; }));
-})();
+test('Find a matching value in a list', function() {
+	var numbers = [1,2,3,4,5,6,7,8,9],
+		list = new List(numbers);
+
+	test.that('Value is 1', list.find(function(num) { return num < 5; }) === 1);
+	test.that('Value is 6', list.find(function(num) { return num > 5; }) === 6);
+});
 
 // Find the last matching value in a list
-(function() {
-	var numbers = [1,2,3,4,5,6,7,8,9];
-	var list = new List(numbers);
-	console.log('Test: Find the last matching value in a list');
-	console.log(list.findLast(function(num) { return num < 5; }));
-})();
+test('Find the last matching value in a list', function() {
+	var numbers = [1,2,3,4,5,6,7,8,9],
+		list = new List(numbers);
+
+	test.that('Value is 4', list.findLast(function(num) { return num < 5; }) === 4);
+	test.that('Value is 9', list.findLast(function(num) { return num > 7; }) === 9);
+});
 
 // Find all matching values in a list
-(function() {
-	var numbers = [1,2,3,4,5,6,7,8,9];
-	var list = new List(numbers);
-	console.log('Test: Find all matching values in a list');
-	console.log(list.findAll(function(num) { return num < 5; })); 
-})();
+test('Find all matching values in a list', function() {
+	var numbers = new List([1,2,3,4,5,6,7,8,9]);
 
-// Find all matching values in a list of objects
-(function() {
-	var positions = [{ x: 10, y: 20 }, { x: 22, y: 12 }, { x: 10, y: 33 }];
-	var list = new List(positions);
+	test.that('Length is 4', numbers.findAll(function(num) { return num < 5; }).count() === 4);
+	test.that('Length is 4', numbers.findAll(function(num) { return num > 5; }).count() === 4)
+	test.that('Length is 1', numbers.findAll(function(num) { return num === 5; }).count() === 1)
+
+	var positions = new List([{ x: 10, y: 20 }, { x: 22, y: 12 }, { x: 10, y: 33 }]);
 	
-	console.log('Test: Find all matching values in a list of objectst');
-	console.log(list.findAll(function(pos) { return pos.x === 10; }));
-})();
+	test.that('Length is 2', positions.findAll(function(pos) { return pos.x === 10; }).count() === 2);
+	test.that('First value y is 20', positions.findAll(function(pos) { return pos.x === 10; }).get(0).y === 20);
+	test.that('Seconds value y is 33', positions.findAll(function(pos) { return pos.x === 10; }).get(1).y === 33);
+});
 
 // Get the first value in the list
-(function() {
+test('Get the first value in the list', function() {
 	var list = new List( [ 'Luke', 'Leia', 'Han', 'Chewbacca' ] );
 	
-	console.log('Test: Get the first value in the list');
-	console.log(list.first());
-})();
+	test.that('First value is "Luke"', list.first() === 'Luke');
+	test.that('First value is not "Han"', list.first() != 'Han');
+});
 
 // Get the last value in the list
-(function() {
+test('Get the last value in the list', function() {
 	var list = new List( [ 'Link', 'Zelda', 'Gannon' ] );
 	
-	console.log('Test: Get the last value in the list');
-	console.log(list.last());
-})();
+	test.that('Last value is "Gannon"', list.last() === 'Gannon');
+	test.that('Last value is not "Link"', list.last() != 'Link');
+});
 
 // Loop each value in the list
-(function() {
-	console.log('Test: Loop each value in the list');
+test('Loop each value in the list', function() {
 	var list = new List( [ 'Gamma', 'Helm', 'Johnson', 'Vlissides' ] );
 	list.forEach(function(value, index, list) {
-		console.log('The value at index ' + index + ' is ' + value, ' this:', this);
+
+		if(index === 0) {
+			test.that('Value of index ' + index + ' is Gamma', list[index] === 'Gamma');
+		}
+		else if(index === 1) {
+			test.that('Value  of index ' + index + ' is Helm', list[index] === 'Helm');
+		}
+		else if(index === 2) {
+			test.that('Value  of index ' + index + ' is Johnson', list[index] === 'Johnson');
+		}
+		else if(index === 3) {
+			test.that('Value  of index ' + index + ' is Vlissides', list[index] === 'Vlissides');
+		}
+
 	});
-})();
+});
 
 // Get value at a certain index
-(function() {
+test('Get value at a certain index', function() {
 	var list = new List( [ 'Angular', 'Knockout', 'Ember', 'Backbone' ] );
 	
-	console.log('Test: Get value at a certain index');
-	console.log(list.get(2));
-})();
+	test.that('Value of index 0 is "Angular"', list.get(0) === 'Angular');
+	test.that('Value of index 2 is "Ember"', list.get(2) === 'Ember');
+	test.that('Value of index 3 is "Backbone"', list.get(3) === 'Backbone');
+	test.that('Value of index 4 is null', list.get(4) === null);
+});
 
 // Get every X value from a list
-(function() {
+test('Get every X value from a list', function() {
 	var list = new List( [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ] );
 	
-	console.log('Test: Get every X value from a list');
-	console.log(list.getNth(0, 2)); // => result: 1, 3, 5, 7, 9
-	console.log(list.getNth(1, 2)); // => result: 2, 4, 6, 8
-	console.log(list.getNth(2, 3)); // => result: 3, 6, 9
-})();
+	test.that('Length is 5', list.getNth(0, 2).count() === 5); // => result: 1, 3, 5, 7, 9
+	test.that('first value is 1', list.getNth(0, 2).get(0) === 1);
+	test.that('second value is 3', list.getNth(0, 2).get(1) === 3);
+	test.that('fifth value is 9', list.getNth(0, 2).get(4) === 9);
+	test.that('Length is 4', list.getNth(1, 2).count() === 4); // => result: 2, 4, 6, 8
+	test.that('first value is 2', list.getNth(1, 2).get(0) === 2);
+	test.that('fourth value is 3', list.getNth(1, 2).get(3) === 8);
+	test.that('Length is 3', list.getNth(2, 3).count() === 3); // => result: 3, 6, 9
+	test.that('first value is 3', list.getNth(2, 3).get(0) === 3);
+	test.that('third value is 9', list.getNth(2, 3).get(2) === 9);
+});
 
 // Get the array of values
-(function() {
+test('Get the array of values', function() {
 	var list = new List( [ 'Pizza', 'Kebab', 'Hamburger', 'Taco' ] );
 	
-	console.log('Test: Get the array of values');
-	console.log(list.getAll());
-})();
+	test.that('Value is array', list.getAll() instanceof Array);
+	test.that('Array lenght is 4', list.getAll().length === 4);
+	test.that('First value is "Pizza"', list.getAll()[0] === 'Pizza');
+	test.that('Fourth value is "Taco"', list.getAll()[3] === 'Taco');
+});
 
 // Get index of a value
-(function() {
+test('Get index of a value', function() {
 	var list = new List( [ 'fire', 'ice', 'earth', 'wind' ] );
 	
-	console.log('Test: Get index of a value');
-	console.log('Index of ice is: ', list.indexOf('ice'));
-})();
+	test.that('Index of ice is 1: ', list.indexOf('ice') === 1);
+	test.that('Index of wind is 3: ', list.indexOf('wind') === 3);
+});
 
 // Get the last index of a value
-(function() {
+test('Get the last index of a value', function() {
 	var list = new List( [ 0, 1, 1, 0, 1, 0, 0, 1, 0 ] );
 	
-	console.log('Test: Get last index of a value');
-	console.log('Last index of 1 is: ', list.lastIndexOf(1));
-})();
+	test.that('Last index of 1 is 7', list.lastIndexOf(1) === 7);
+	test.that('Last index of 0 is 8', list.lastIndexOf(0) === 8);
+});
 
 // Insert value to a list
-(function() {
+test('Insert value to a list', function() {
 	var list = new List( [ 'Ale', 'Lager', 'Pilsner' ] );
 	
-	console.log('Test: Insert value to a list');
-	console.log(list);
+	test.that('list length is 3', list.count() === 3);
 	
 	list.insert('Stout', 1); // => result: Ale, Stout, Lager, Pilsner
-	console.log(list);
+	
+	test.that('list length is 4 (after inserting value)', list.count() === 4);
+	test.that('value 1 in list is "Stout"', list.get(1) === 'Stout');
 	
 	list.insert('Porter'); // => result: Porter, Ale, Stout, Lager, Pilsner
-	console.log(list);
-})();
+
+	test.that('list length is 5 (after inserting value)', list.count() === 5);
+	test.that('value 0 in list is "Porter"', list.get(0) === 'Porter');
+});
 
 // Insert multiple values to a list
-(function() {
+test('Insert multiple values to a list', function() {
 	var list = new List( [ 'Futura', 'Helvetica', 'Franklin' ] );
 	
-	console.log('Test: Insert multiple svalue to a list');
-	console.log(list);
+	test.that('list length is 3', list.count() === 3);
 	
 	list.insertMany([ 'Gotham', 'Univers', 'DIN' ], 1); // => result: Futura, Gotham, Univers, DIN, Helvetica, Franklin
-	
-	console.log(list);
-})();
+
+	test.that('list length is 6 (after inserting value)', list.count() === 6);
+	test.that('value 0 in list is "Futura"', list.get(0) === 'Futura');
+	test.that('value 1 in list is "Gotham"', list.get(1) === 'Gotham');
+	test.that('value 2 in list is "Univers"', list.get(2) === 'Univers');
+});
 
 // Get a certain range of values from a list
-(function() {
+test('Get a certain range of values from a list', function() {
 	var list = new List( [ 1, 2, 3, 4, 5, 6 ] );
 	
-	console.log('Test: Get a certain range of values from a list');
-	console.log(list.range(2,2)); // => result: 3, 4
-})();
+	test.that('List range length is 2', list.range(2,2).count() === 2); // => result: 3, 4
+	test.that('Lists first value is 3', list.range(2,2).get(0) === 3);
+	test.that('Lists second value is 4', list.range(2,2).get(1) === 4);
+});
 
 // Remove a value from a list
-(function() {
+test('Remove a value from a list', function() {
 	var list = new List( [ 'Vampire', 'Verewolf', 'Zombie', 'Mutant' ] );
 	
-	console.log('Test: Remove a value from a list');
-	console.log(list);
+	test.that('List length is 4', list.count() === 4);
+	test.that('List value 2 is "Zombie"', list.get(2) === 'Zombie');
 	
 	list.remove('Zombie'); // => result: 'Vampire', 'Verewolf', 'Mutant'
 	
-	console.log(list);
-})();
+	test.that('List length is 3', list.count() === 3);
+	test.that('List value 2 is "Mutant"', list.get(2) === 'Mutant');
+});
 
 // Remove multiple values from a list
-(function() {
+test('Remove multiple values from a list', function() {
 	var list = new List( [ 'ThunderCats', 'Transformers', 'Robotech', 'G-Force', 'M.A.S.K.' ] );
 	
-	console.log('Test: Remove multiple values from a list');
-	console.log(list);
+	test.that('List length is 5', list.count() === 5);
+	test.that('List value 1 is "Transformers"', list.get(1) === 'Transformers');
+	test.that('List value 4 is "M.A.S.K."', list.get(4) === 'M.A.S.K.');
 	
 	list.removeMany([ 'Transformers', 'M.A.S.K.' ]); // => result: 'ThunderCats', 'Robotech', 'G-Force'
 	
-	console.log(list);
-})();
+	test.that('List length is 3', list.count() === 3);
+});
 
 // Remove a range of values from a list
-(function() {
+test('Remove a range of values from a list', function() {
 	var list = new List( [ 'spider', 'bat', 'snake', 'wasp' ] );
 	
-	console.log('Test: Remove a range of values from a list');
-	console.log(list.list);
+	test.that('List length is 4', list.count() === 4);
 	
 	list.removeRange(1,2); // => result: 'spider', 'wasp'
 	
-	console.log(list.list);
-})();
+	test.that('List length is 2', list.count() === 2);
+	test.that('First value is spider', list.get(0) === 'spider');
+	test.that('Seconds value is wasp', list.get(1) === 'wasp');
+});
 
 // Set the value of a certain index in the list
-(function() {
+test('Set the value of a certain index in the list', function() {
 	var list = new List( ['kyle', 'kenny', 'stan'] );
 	
-	console.log('TEST: Set the value of a certain index in the list');
-	console.log(list.list);
+	test.that('List length is 3', list.count() === 3);
+	test.that('Second value is kenny ', list.get(1) === 'kenny');
 	
 	list.set(1, 'cartman'); // => result: 'kyle', 'cartman', 'stan'
+
+	test.that('List length is 3', list.count() === 3);
+	test.that('Second value is cartman', list.get(1) === 'cartman');
 	
-	console.log(list.list);
-})();
+});
 
 // Skip values in a list
-(function() {
+test('Skip values in a list', function() {
 	var list = new List( [ 1, 2, 3, 4, 5 ] );
 	
-	console.log('TEST: Skip values in a list');
-	
-	console.log(list.skip(3)); // => result: 4, 5
-})();
+	test.that('list skip 3 length is 2', list.skip(3).count() === 2); // => result: 4, 5
+	test.that('list skip 3 value 0 is 4', list.skip(3).get(0) === 4);
+	test.that('list skip 3 value 1 is 5', list.skip(3).get(1) === 5);
+});
 
 // Split values in a list
-(function() {
+test('Split values in a list', function() {
 	var list = new List( [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] );
 	var list2 = new List( [ 'a', 'b', 'c', 'd' ] );
-	
-	console.log('TEST: Split values in a list');
+
+	// TODO
 	
 	console.log(list.split(3)); // => result: [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ], [10] ]
 
 	console.log(list2.split(2)); // => result: [ [ 'a', 'b' ], [ 'c', 'd' ] ]
-})();
+});
 
 // Split values in a list into columns
-(function() {
+test('Split values in a list into columns', function() {
 	var list = new List( [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] );
 	var list2 = new List( [ 'a', 'b', 'c', 'd' ] );
+
+	// TODO
 	
 	console.log('TEST: Split values in a list into columns');
 	
@@ -294,25 +410,25 @@
 	*/
 
 	console.log(list2.splitColumns(2)); // => result: [ 'a', 'b' ], [ 'c', 'd' ]
-})();
+});
 
 // Take values in a list
-(function() {
+test('Take values in a list', function() {
 	var list = new List( [ 1, 2, 3, 4, 5 ] );
 	
-	console.log('TEST: Take values in a list');
-	
-	console.log(list.take(3)); // => result: 1, 2, 3
-})();
+	test.that('List take 3 length is 3', list.take(3).count() === 3); // => result: 1, 2, 3
+	test.that('List take 3 value 0 is 1', list.take(3).get(0) === 1);
+	test.that('List take 3 value 2 is 3', list.take(3).get(2) === 3);
+});
 
 // Get all unique values in a list
-(function() {
+test('Get all unique values in a list', function() {
 	var list = new List([1, 2, 3, 2, 1]);
 	
-	console.log('TEST: Get all unique values in a list');
-	
-	console.log(list.unique()); // => returns: 1, 2, 3
-})();
+	test.that('List with unique values length is 3', list.unique().count() === 3); // => returns: 1, 2, 3
+});
+
+test.summary();
 
 // Chaining... TODO
 

@@ -34,6 +34,8 @@ List.prototype.clone = function() {
 
 List.prototype.compareObj = function(obj1, obj2) {
 	// TODO
+	console.warn('List does not support Objects.');
+	
 	throw 'compareObj() is not implemented yet';
 	
 	return null;
@@ -47,18 +49,43 @@ List.prototype.count = function() {
     return this.list.length;
 };
 
-List.prototype.equals = function(list) {
-	// TODO
-	throw 'equals() is not implemented yet';
-	
-	return false;
+List.prototype.equals = function(other) {
+	if (!other.list) {
+		return false;
+	}
+
+	if (this.list.length != other.list.length) {
+		return false;
+	}
+
+	for (var i = 0, l = this.list.length; i < l; i++) {
+		var thisValue = this.list[i],
+			otherValue = other.list[i];
+
+		// Does not support objects
+		if(typeof thisValue === 'object' || typeof otherValue === 'object') {
+			console.warn('List does not support Objects.');
+			return false;
+		}
+
+		if (thisValue instanceof Array && otherValue instanceof Array) {
+			if (!thisValue.equals(otherValue)) {
+				return false;
+			}
+		}
+		else if (thisValue != otherValue) {
+			return false;
+		}       
+	}
+
+	return true;
 };
 
 List.prototype.find = function(func) {
 	var i,
 		l,
 		item,
-		part = [];
+		list = new List();
  
 	for(i = 0, l = this.list.length; i < l; i++) {
 		item = this.list[i];
